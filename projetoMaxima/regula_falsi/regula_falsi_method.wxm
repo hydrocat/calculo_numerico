@@ -1,0 +1,75 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 15.04.0 ] */
+
+/* [wxMaxima: comment start ]
+Universidade Tecnológica Federal do Paraná
+Wellington José Corrêa
+Cálculo Numérico
+Raízes de Equação
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: title   start ]
+Método Regula Falsi
+   [wxMaxima: title   end   ] */
+
+/* [wxMaxima: comment start ]
+Inicialmente, zeramos a memória:
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+kill(all);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+Definamos a função f(x)=cos(x)-x:
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+f(x):=cos(x)-x $
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+Façamos o gráfico da funções f1(x)=cos(x) e f2(x)=x. 
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+wxplot2d([cos(x), x], [x,0,2])$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+Pelo gráfico,  consideremos por exemplo a=0.5 e b=%pi/4. 
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: comment start ]
+Abaixo, encontra-se o procedimento do método regula falsi:
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+regulafalsi(f,a,b,epsilon):=(c,i, Nmax:100,
+    i:1,
+print("i=",0,",", 'x[0]=a),
+print("i=",1,",", 'x[1]=b),
+        do (x[0]:a,x[1]:b,
+            x[i+1]:(a*f(b)-b*f(a))/(f(b)-f(a)),
+i:i+1,
+            if(abs(x[i]-x[i-1])<epsilon ) then (
+               return(["A raiz é", 'x[i]=x[i]:(float(x[i]))])
+            )
+            else (
+                print( "i=",i,",",'x[i]=x[i]:float(x[i])),
+                if(f(a)*f(x[i])<0) then
+                    b:x[i] else a:x[i]
+            )
+    ))$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+Finalmente, substituímos os valores de f(x), a=.5, b=%pi/4 e tolerância epsilon=10^(-5):
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+regulafalsi(f(x),0.5,float(%pi/4),1e-5);
+/* [wxMaxima: input   end   ] */
+
+/* Maxima can't load/batch files which end with a comment! */
+"Created with wxMaxima"$

@@ -1,0 +1,73 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 13.04.2 ] */
+
+/* [wxMaxima: comment start ]
+Universidade Tecnológica Federal do Paraná
+Cálculo Numérico
+Raízes de Equação
+Wellington José Corrêa
+Vitório Miguel Prieto Cilia
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: title   start ]
+Método da Bissecção
+   [wxMaxima: title   end   ] */
+
+/* [wxMaxima: comment start ]
+
+Como utilizar:
+    bisseccao( <nome da funcao>, <erro maximo>, <valor de um extremo>, <valor do outro extremo> );
+
+Retorna:
+    O valor do X medio encontrado.
+
+Nota:
+    O nome de uma função existente em seu código
+    deverá ser passada no primeiro parametro ! vide o exemplo.
+
+Exemplo:
+    Definindo a função desejada:
+    f(x):=x³;
+
+    chamando a função:
+    bisseccao( f, 1/1000, -1, 1 );
+
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+bisseccao( funcao, erro, a, b ):=
+    block(
+[a:a,b:b,funcao:funcao,log2,erro:erro,erroAbs,xm,fxm],
+        if 
+            funcao(a)*funcao(b)>0
+        then 
+            (
+            print("a e b não tem imagens validas"),
+            print("f(a) = ",funcao(a)),
+            print("f(b) = ",funcao(b)),
+            return (false)
+            ),
+    log2(x):=log(x)/log(2),
+    k:ceiling(log2((b-a)/erro)-1),
+    print("Serao feitas ",k," ou mais iterações"),
+    erroAbs(x,y):=abs(y-x),
+
+    while is(erroAbs(a,b) > erro )
+    do 
+    (
+        xm:(a+b)/2,
+        fxm:funcao(xm),
+        if fxm = 0 then return(xm),
+        if fxm * funcao(a)<0
+        then
+            b:xm
+        else
+            a:xm
+    ),
+    print("A raiz é : ",float(xm)),
+    return(xm)
+);
+/* [wxMaxima: input   end   ] */
+
+/* Maxima can't load/batch files which end with a comment! */
+"Created with wxMaxima"$

@@ -1,0 +1,150 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 13.04.2 ] */
+
+/* [wxMaxima: comment start ]
+Universidade Tecnológica Federal do Paraná
+Wellington José Corrêa
+Cálculo Numérico
+Raízes de Equação
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: title   start ]
+Método de Newton
+   [wxMaxima: title   end   ] */
+
+/* [wxMaxima: comment start ]
+Exemplo 1:  Use o método de Newton para obter uma aproximação de uma solução para f(x)=cos x - x com tolerância de 10^(-2).
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+kill(all); reset(); kill(all);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+Plotamos o gráfico de f_1(x)=cos(x) e f_2(x)=x:
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+wxplot2d([cos(x),x], [x,0,2]);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+Definamos os valores de a=0,5 e b=%pi/4
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+ 'a=a : .5;  'b=b : float(%pi/4);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+Em seguida, denotamos f(x) e g(x)=f'(x):
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+f(x) :=cos(x)-x;
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+define(g(x),diff(f(x),x,1));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+Agora, declaramos o valor de epsilon e o número máximo de iterações.
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+'epsilon=epsilon : 1e-2;
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+'Nmax=Nmax : 100$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+Escolhamos o ponto x_0:
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+k:0$ if f(a)*at(diff(f(x),x,2),x=a)>0 then ('x[0]=x[0]:a) else ('x[0]=x[0]:b);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+Na iteração a seguir temos:
+1ª linha: uso da fórmula de iteração de Newton;
+2ª linha: definamos o erro;
+3ª linha: uso do critério da parada no qual retornará a solução almejada;
+4ª e 5ª linhas: apresenta os passos e a sequência de soluções (tecle Shift + Enter duas vezes).
+
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+ for n:0 thru Nmax  step 1 do ( k : n, x[n+1] : float(x[n] - f(x[n])/g(x[n])),       
+err:abs(x[n]-x[n-1]),  
+if (err < epsilon) then (  return( 'x[n]=x[k])) ),
+for n:0 thru k step 1 do (print("n=",n, ",", 'x[n]= x[n]))$
+print("A raiz é ", 'x[k]=x[k]:float(x[k]))$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+Pode-se usar o método de newton diretamente, 
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+load(mnewton)$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+mnewton(f(x),x,x[0]);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+Comparando com a solução dada pelo comando find_root:
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+find_root(f(x),x,.5,x[0]);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+Exemplo 2: Usando o método de Newton, determine a raiz positiva da  equação f(x)=x^2-2=0 com "epsilon" <10^(-5), isto é, desejamos calcular raiz de 2.
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+kill(all); reset(); kill(all);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+wxplot2d([x^2-2], [x,-0,2])$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+'a=a :1;  'b=b : 2; 
+f(x) :=x^2-2;                       
+define(g(x),diff(f(x),x,1));       
+epsilon : 1e-5;                    
+Nmax : 100;
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+if f(a)*at(diff(f(x),x,2),x=a)>0 then ('x[0]=x[0]:a) else ('x[0]=x[0]:b); 
+ n:0$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+Lembre-se que para descrever toda a sequência, tecle Shift + Enter duas vezes.
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+for k:0 thru Nmax  step 1 do ( n : k, x[k+1] : float(x[k] - f(x[k])/g(x[k])),      
+err:abs(x[k]-x[k-1]),                                                            
+if (err < epsilon) then (  return('x[k]=x[n])) ),                               
+for k:0 thru n step 1 do (print("k=",k, ",", 'x[k]= x[k]))$
+print("A raiz é ", 'x[n]=x[n]:float(x[n]))$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+float(sqrt(2)); /* Valor de raiz de 2 */;
+/* [wxMaxima: input   end   ] */
+
+/* Maxima can't load/batch files which end with a comment! */
+"Created with wxMaxima"$

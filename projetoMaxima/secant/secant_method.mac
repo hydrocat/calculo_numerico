@@ -1,0 +1,94 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 13.04.2 ] */
+
+/* [wxMaxima: comment start ]
+Universidade Tecnológica Federal do Paraná
+Wellington José Corrêa
+Vitório Miguel Prieto Cilia
+Cálculo Numérico
+Raízes de Equação
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: title   start ]
+Método da Secante
+   [wxMaxima: title   end   ] */
+
+/* [wxMaxima: comment start ]
+
+Como Utilizar:
+    secante(<nome da funcao>,<erro>,<valor esquerdo>,<valor direito>);
+
+Retorna:
+    O valor X cuja imagem seja aproximadamente a raiz da função dada.
+
+Nota:
+    O método da secante pode estourar, isto é, sair do intervalo desejado.
+    quando isso ocorre, o valor resultante será inesperado, as vezes fora do intervalo.
+    
+    Caso o intervalo não seja correto, isto é, f(a) * f(b) > 0, o processo não iniciará.
+
+
+Exemplo:
+    Define-se a função desejada:
+    f(x):=x²-3;
+
+    Define-se o erro e os extremos:
+    erro:10^-5;
+    a:0;
+    b:3;
+
+    Chama a função:
+    secante(f, erro, a, b);
+
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+computaSecante(funcao, xk1, xk0 ):=
+    block(
+[funcao:funcao, xk1:xk1, xk0:xk0],
+    temp:xk1-(funcao(xk1)*(xk1-xk0))/(funcao(xk1)-funcao(xk0)),
+    return (temp)
+);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+computaErro_secante( a, b ):=
+abs(b-a);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+intervaloValido_secante( funcao, a, b ):=
+    block(
+[funcao:funcao,a:a,b:b],
+    if funcao(a) * funcao(b) < 0
+    then return (false)
+    else return (true)
+);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+secante( funcao, erro, a, b ):=
+    block(
+[funcao:funcao,erro:erro,a:a,b:b,temp],
+    if intervaloValido_secante( funcao, a, b )
+    then 
+        (
+        print("Intervalo Invalido"),
+        print("f(a) = ",funcao(a)),
+        print("f(b) = ",funcao(b)),
+        return (false)
+        ),
+
+    while computaErro_secante(a,b) > erro  
+    do(
+        temp = computaSecante( funcao, a,b ),
+        b:a,
+        a:temp
+       ),    
+
+    return(float(a))
+);
+/* [wxMaxima: input   end   ] */
+
+/* Maxima can't load/batch files which end with a comment! */
+"Created with wxMaxima"$
